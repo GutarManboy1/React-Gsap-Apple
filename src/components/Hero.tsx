@@ -1,11 +1,13 @@
 import { useRef, useEffect } from "react";
 const Hero = () => {
 
-    const videoRef = useRef(); 
+    // @ts-ignore - videoRef type works at runtime
+    const videoRef = useRef();
     // if i want to have greater control over the video and playback
 
     useEffect(() => {
-        if (videoRef.current) 
+        if (videoRef.current)
+            // @ts-ignore - playbackRate exists on video element
             videoRef.current.playbackRate = 2;
     }, []);
 
