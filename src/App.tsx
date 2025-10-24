@@ -1,6 +1,11 @@
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import ProductViewer from './components/ProductViewer'
+import gsap from 'gsap'
+import { ScrollTrigger, SplitText } from 'gsap/all'
+
+gsap.registerPlugin(ScrollTrigger, SplitText)
+// gsap core animation code can go here or inside components it has to be registered first to work
 
 const App = () => {
   return (
