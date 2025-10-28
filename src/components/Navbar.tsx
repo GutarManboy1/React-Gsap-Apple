@@ -1,13 +1,13 @@
-import { navItems } from '../constants'
+import { navLinks } from '../constants'
 const Navbar = () => {
   return (
     <header>
         <nav>
             <img src="/logo.svg" alt="Apple Logo" />
             <ul>
-                {navItems.map((item) => (
-                    <li key={item}>
-                        <a href={item}>{item}</a>
+                {navLinks.map((link) => (
+                    <li key={link}>
+                        <a href={link}></a>
                     </li>
                 ))}
             </ul>
