@@ -16,7 +16,7 @@ const ProductViewer = () => {
 
   return (
     <section id="product-viewer">
-      <h2>Take a Peek Inside</h2>
+      <h2>Take a Peek Inside.</h2>
       <div className="controls">
         <p className="info">
           MacBook Pro <br />Available in 14", 16" in Space Gray and Black
