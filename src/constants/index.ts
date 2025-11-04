@@ -36,7 +36,15 @@ const performanceImages = [
     { id: "p7", src: "/performance7.png" },
 ];
 
-const performanceImgPositions = [
+type PerformanceImgPosition = {
+    id: string;
+    left?: number;
+    right?: number;
+    bottom?: number;
+    transform?: string;
+};
+
+const performanceImgPositions: PerformanceImgPosition[] = [
     {
         id: "p1",
         left: 5,
