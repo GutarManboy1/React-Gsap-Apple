@@ -1,8 +1,11 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { performanceImages, performanceImgPositions } from "../constants/index.js";
 import {useMediaQuery} from "react-responsive";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Performance = () => {
     const isMobile = useMediaQuery({ query: "(max-width: 1024px)" });
@@ -10,9 +13,7 @@ const Performance = () => {
 
     useGSAP(
         () => {
-            const sectionEl = sectionRef.current;
-            if (!sectionEl) return;
-
+            // Performance Section Animation
             // Text Animation
             gsap.fromTo(
                 ".content p",
@@ -39,7 +40,7 @@ const Performance = () => {
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     start: "top bottom",
-                    end: "bottom top",
+                    end: "center center",
                     scrub: 1,
                     invalidateOnRefresh: true,
                 },
@@ -58,7 +59,7 @@ const Performance = () => {
 
                 if (item.transform) vars.transform = item.transform;
 
-                tl.to(selector, vars, 0);
+                tl.to({[item.id]: selector}, vars, 0);
             });
         },
         { scope: sectionRef, dependencies: [isMobile] }
@@ -72,7 +73,7 @@ const Performance = () => {
 
       <div className="wrapper">
         {performanceImages.map(({ id, src }) => (
-          <img key={id} src={src} alt={id} />
+          <img key={id} src={src} alt={id} className={id} />
         ))}
       </div>
 
