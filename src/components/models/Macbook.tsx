@@ -9,8 +9,10 @@ Title: macbook pro M3 16 inch 2024
 */
 
 import { useGLTF, useTexture, useVideoTexture } from '@react-three/drei'
-import { use } from 'react';
-import useMacbookStore from '../../store';
+import { useEffect } from 'react'
+import * as THREE from 'three'
+import useMacbookStore from '../../store'
+import { noChangeParts } from '../../constants'
 
 export default function Macbook(props: any) {
 
@@ -21,11 +23,14 @@ export default function Macbook(props: any) {
   const screen = useVideoTexture(texture);
   
   useEffect(() => {
-    scene.traverse((child) => {
+    scene.traverse((child: THREE.Object3D) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
         if (!noChangeParts.includes(mesh.name)) {
-          mesh.material.color = new THREE.Color(color);
+          const material = mesh.material as THREE.MeshStandardMaterial;
+          if (material.color) {
+            material.color = new THREE.Color(color);
+          }
         }
       }
     });
