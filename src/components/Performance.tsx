@@ -1,11 +1,8 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { performanceImages, performanceImgPositions } from "../constants/index.js";
 import {useMediaQuery} from "react-responsive";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const Performance = () => {
     const isMobile = useMediaQuery({ query: "(max-width: 1024px)" });
@@ -13,7 +10,9 @@ const Performance = () => {
 
     useGSAP(
         () => {
-            // Performance Section Animation
+            const sectionEl = sectionRef.current;
+            if (!sectionEl) return;
+
             // Text Animation
             gsap.fromTo(
                 ".content p",
@@ -38,9 +37,9 @@ const Performance = () => {
             const tl = gsap.timeline({
                 defaults: { duration: 2, ease: "power1.inOut", overwrite: "auto" },
                 scrollTrigger: {
-                    trigger: sectionRef.current,
+                    trigger: sectionEl,
                     start: "top bottom",
-                    end: "center center",
+                    end: "bottom top",
                     scrub: 1,
                     invalidateOnRefresh: true,
                 },
@@ -51,7 +50,7 @@ const Performance = () => {
                 if (item.id === "p5") return;
 
                 const selector = `.${item.id}`;
-                const vars: Record<string, string> = {};
+                const vars = {};
 
                 if (typeof item.left === "number") vars.left = `${item.left}%`;
                 if (typeof item.right === "number") vars.right = `${item.right}%`;
@@ -59,36 +58,42 @@ const Performance = () => {
 
                 if (item.transform) vars.transform = item.transform;
 
-                tl.to({[item.id]: selector}, vars, 0);
+                tl.to(selector, vars, 0);
             });
         },
         { scope: sectionRef, dependencies: [isMobile] }
     );
-  
-  return (
-    <section id="performance">
-      <h2>
-        Next Generation Performance. <br /> Next Generation Power.
-      </h2>
 
-      <div className="wrapper">
-        {performanceImages.map(({ id, src }) => (
-          <img key={id} src={src} alt={id} className={id} />
-        ))}
-      </div>
+    return (
+        <section id="performance" ref={sectionRef}>
+            <h2>Next-level graphics performance. Game on.</h2>
 
-      <div className="content">
-        <p>
-          The M2 chip is a 10-core GPU, 6-core CPU, and a 16-core Neural Engine.{" "}
-          <span className="text-white">
-            It is the most powerful chip in a Mac.
+             <div className="wrapper">
+                {performanceImages.map((item, index) => (
+                    <img
+                        key={index}
+                        src={item.src}
+                        className={item.id}
+                        alt={item.alt || `Performance Image #${index + 1}`}
+                    />
+                ))}
+             </div>
+
+            <div className="content">
+                <p>
+                    Run graphics-intensive workflows with a responsiveness that keeps up
+                    with your imagination. The M4 family of chips features a GPU with a
+                    second-generation hardware-accelerated ray tracing engine that renders
+                    images faster, so{" "}
+                    <span className="text-white">
+            gaming feels more immersive and realistic than ever.
           </span>{" "}
-          It is 50% faster than the M1 chip. It is also 50% more energy
-          efficient.{" "}
-        </p>
-      </div>
-    </section>
-  );
-};
- 
-export default Performance;
+                    And Dynamic Caching optimizes fast on-chip memory to dramatically
+                    increase average GPU utilization — driving a huge performance boost
+                    for the most demanding pro apps and games.
+                </p>
+            </div>
+        </section>
+    )
+}
+export default Performance

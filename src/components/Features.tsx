@@ -1,85 +1,115 @@
-
-import { Canvas } from '@react-three/fiber'
-import * as THREE from 'three'
-
-import Macbook from './models/Macbook'
-import { features } from '../constants/index'
-import StudioLights from './three/StudioLights'
-
-import clsx from 'clsx'
-import { Suspense, useRef } from 'react'
-import { Html } from '@react-three/drei'
-import { useMediaQuery } from 'react-responsive'
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-gsap.registerPlugin(ScrollTrigger)
+import {Canvas} from "@react-three/fiber";
+import StudioLights from "./three/StudioLights.jsx";
+import {features, featureSequence} from "../constants/index.js";
+import clsx from "clsx";
+import {Suspense, useEffect, useRef} from "react";
+import {Html} from "@react-three/drei";
+import MacbookModel from "./models/Macbook.jsx";
+import {useMediaQuery} from "react-responsive";
+import useMacbookStore from "../store/index.js";
+import {useGSAP} from "@gsap/react";
+import gsap from 'gsap';
 
 const ModelScroll = () => {
+    const groupRef = useRef(null);
+    const isMobile = useMediaQuery({ query: '(max-width: 1024px)'})
+    const { setTexture } = useMacbookStore();
 
-  const groupRef = useRef<THREE.Group>(null);
-  const isMobile = useMediaQuery({ query: '(max-width: 1024px)' });
+    // Pre-load all feature videos during component mount
+    useEffect(() => {
+        featureSequence.forEach((feature) => {
+            const v = document.createElement('video');
 
-  return (
-  <group ref={groupRef}>
-    <Suspense fallback={<Html><h1 className='text-white text-3xl uppercase'>Loading...</h1></Html>}>
-      <Macbook scale={isMobile ? 0.025 : 0.04} position={[0, 0, 0]}/>
-    </Suspense>
-  </group>
-  )
+            Object.assign(v, {
+                src: feature.videoPath,
+                muted: true,
+                playsInline: true,
+                preload: 'auto',
+                crossOrigin: 'anonymous',
+            });
+
+            v.load();
+        })
+    }, []);
+
+    useGSAP(() => {
+        // 3D MODEL ROTATION ANIMATION
+        const modelTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: '#f-canvas',
+                start: 'top top',
+                end: 'bottom  top',
+                scrub: 1,
+                pin: true,
+            }
+        });
+
+        // SYNC THE FEATURE CONTENT
+        const timeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: '#f-canvas',
+                start: 'top center',
+                end: 'bottom  top',
+                scrub: 1,
+            }
+        })
+
+        // 3D SPIN
+        if(groupRef.current) {
+            modelTimeline.to(groupRef.current.rotation, { y: Math.PI * 2, ease: 'power1.inOut'})
+        }
+
+        // Content & Texture Sync
+        timeline
+            .call(() => setTexture('/videos/feature-1.mp4'))
+            .to('.box1', { opacity: 1, y: 0, delay: 1 })
+
+            .call(() => setTexture('/videos/feature-2.mp4'))
+            .to('.box2', { opacity: 1, y: 0 })
+
+            .call(() => setTexture('/videos/feature-3.mp4'))
+            .to('.box3', { opacity: 1, y: 0 })
+
+            .call(() => setTexture('/videos/feature-4.mp4'))
+            .to('.box4', { opacity: 1, y: 0})
+
+            .call(() => setTexture('/videos/feature-5.mp4'))
+            .to('.box5', { opacity: 1, y: 0 })
+    }, []);
+
+    return (
+        <group ref={groupRef}>
+            <Suspense fallback={<Html><h1 className="text-white text-3xl uppercase">Loading...</h1></Html>}>
+                <MacbookModel scale={isMobile ? 0.05 : 0.08} position={[0, -1, 0]} />
+            </Suspense>
+        </group>
+    )
 }
+
 const Features = () => {
-  const sectionRef = useRef(null)
+    return (
+        <section id="features">
+            <h2>See it all in a new light.</h2>
 
-  useGSAP(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: 'top top',
-        end: '+=400%',
-        scrub: 1,
-        pin: true,
-      },
-    })
+            <Canvas id="f-canvas" camera={{}}>
+                <StudioLights />
+                <ambientLight intensity={0.5} />
+                <ModelScroll />
+            </Canvas>
 
-    // Animate feature boxes sequentially
-    features.forEach((_, index) => {
-      const boxClass = `.box-${index + 1}`
-
-      tl.fromTo(
-        boxClass,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.5 },
-        index * 0.5
-      ).to(
-        boxClass,
-        { opacity: 0, y: -20, duration: 0.5 },
-        (index + 1) * 0.5
-      )
-    })
-  }, { scope: sectionRef })
-
-  return (
-    <section id='features' ref={sectionRef} className='h-screen'>
-      <h2>See How It Works.</h2>
-      <div className='relative w-full h-full'>
-        <Canvas id='f-canvas' camera={{ position: [0, 0, 5], fov: 25 }}>
-          <ambientLight intensity={0.5} />
-          <StudioLights/>
-          <ModelScroll />
-        </Canvas>
-
-        <div className='absolute inset-0 pointer-events-none'>
-          {features.map((feature, index) => (
-            <div key={feature.id} className={clsx ('box', `box-${index + 1}`, feature.styles, 'pointer-events-auto')}>
-              {feature.text}
+            <div className="absolute inset-0">
+                {features.map((feature, index) => (
+                    <div key={feature.id} className={clsx('box', `box${index + 1}`, feature.styles)}>
+                        <img src={feature.icon} alt={feature.highlight} />
+                        <p>
+                            <span className="text-white">{feature.highlight}</span>
+                            {feature.text}
+                        </p>
+                    </div>
+                ))}
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
+        </section>
+    )
 }
 
 export default Features
