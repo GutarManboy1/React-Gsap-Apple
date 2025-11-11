@@ -66,7 +66,7 @@ const Performance = () => {
 
     return (
         <section id="performance" ref={sectionRef}>
-            <h2>Next-level graphics performance. Game on.</h2>
+            <h2>Performance at your fingertips.<br/> Power up your Mac.</h2>
 
              <div className="wrapper">
                 {performanceImages.map((item, index) => (
