@@ -1,3 +1,18 @@
+<img width="1907" height="979" alt="Image" src="https://github.com/user-attachments/assets/00cc231d-921c-46d4-97e3-2f815905c5d4" />
+
+<img width="1896" height="989" alt="Image" src="https://github.com/user-attachments/assets/add58765-68a6-49e8-8329-8b68b3fefad4" />
+
+<img width="1903" height="989" alt="Image" src="https://github.com/user-attachments/assets/4aff7d84-2673-49dc-85a9-109c6cb290e3" />
+
+<img width="1907" height="990" alt="Image" src="https://github.com/user-attachments/assets/6ccf2419-a99b-48e9-823b-c67d91f65ba7" />
+
+<img width="1912" height="992" alt="Image" src="https://github.com/user-attachments/assets/65894624-f420-463c-b507-df6d8342a6ce" />
+
+<img width="1904" height="991" alt="Image" src="https://github.com/user-attachments/assets/b98e8393-35ac-4256-b06a-ef8af5ba2cdd" />
+
+<img width="1902" height="989" alt="Image" src="https://github.com/user-attachments/assets/e0f56e10-a98d-4450-9835-f6df877f9146" />
+Footer was cut off 
+<img width="1903" height="990" alt="Image" src="https://github.com/user-attachments/assets/082e1b84-1cb1-49d6-baf6-4dc88bd982cc" />
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
