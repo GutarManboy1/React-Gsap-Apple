@@ -27,7 +27,7 @@ const Highlights = () => {
 
   return (
     <section id='highlights'>
-     <h2>Now is the time to shine.<br/>Upgrade and unlock the full potential of your Mac.</h2>
+     <h2>Upgrade and unlock the full potential of your Mac.</h2>
      <h3>Here's what you get with the new 51 Pro and M5 Max chips. </h3>
 
      <div className='masonry'>
